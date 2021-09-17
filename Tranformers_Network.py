@@ -68,3 +68,25 @@ plt.ylabel('Position')
 plt.colorbar()
 plt.show()
 
+# Create a Padding MAsk
+def create_padding_mask(decoder_token_ids):
+    """
+    Creates a matrix mask for the padding cells
+
+    Arguments:
+        decoder_token_ids -- (n, m) matrix
+
+    Returns:
+        mask -- (n, 1, 1, m) binary tensor
+    """
+    seq = 1 - tf.cast(tf.math.equal(decoder_token_ids, 0), tf.float32)
+
+    # add extra dimensions to add the padding
+    # to the attention logits.
+    return seq[:, tf.newaxis, :]
+
+x = tf.constant([[7., 6., 0., 0., 1.], [1., 2., 3., 0., 0.], [0., 0., 0., 4., 5.]])
+print(create_padding_mask(x))
+
+
+
