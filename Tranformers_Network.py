@@ -24,8 +24,8 @@ def get_angles(pos, k, d):
     """
 
     # Get i from dimension span k
-    i = None
+    i = k
     # Calculate the angles using pos, i and d
-    angles = None
+    angles = pos / (10000 ** (2 * (i // 2) / d))
 
     return angles
