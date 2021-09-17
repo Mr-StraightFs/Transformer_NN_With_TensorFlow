@@ -29,3 +29,42 @@ def get_angles(pos, k, d):
     angles = pos / (10000 ** (2 * (i // 2) / d))
 
     return angles
+
+
+def positional_encoding(positions, d):
+    """
+    Precomputes a matrix with all the positional encodings
+
+    Arguments:
+        positions (int) -- Maximum number of positions to be encoded
+        d (int) -- Encoding size
+
+    Returns:
+        pos_encoding -- (1, position, d_model) A matrix with the positional encodings
+    """
+    # initialize a matrix angle_rads of all the angles
+    angle_rads = get_angles(np.arange(positions)[:, np.newaxis],
+                            np.arange(d)[np.newaxis, :],
+                            d)
+
+    # apply sin to even indices in the array; 2i
+    angle_rads[:, 0::2] = np.sin(angle_rads[:, 0::2])
+
+    # apply cos to odd indices in the array; 2i+1
+    angle_rads[:, 1::2] = np.cos(angle_rads[:, 1::2])
+
+    pos_encoding = angle_rads[np.newaxis, ...]
+
+    return tf.cast(pos_encoding, dtype=tf.float32)
+
+pos_encoding = positional_encoding(50, 512)
+
+print (pos_encoding.shape)
+
+plt.pcolormesh(pos_encoding[0], cmap='RdBu')
+plt.xlabel('d')
+plt.xlim((0, 512))
+plt.ylabel('Position')
+plt.colorbar()
+plt.show()
+
