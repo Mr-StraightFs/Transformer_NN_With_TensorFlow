@@ -88,5 +88,23 @@ def create_padding_mask(decoder_token_ids):
 x = tf.constant([[7., 6., 0., 0., 1.], [1., 2., 3., 0., 0.], [0., 0., 0., 4., 5.]])
 print(create_padding_mask(x))
 
+# printing out the Activations
+print(tf.keras.activations.softmax(x))
+print(tf.keras.activations.softmax(x + (1 - create_padding_mask(x)) * -1.0e9))
+
+# a Mask that creates and Returns an upper triangular matrix filled with ones
+def create_look_ahead_mask(sequence_length):
+    """
+    Returns an upper triangular matrix filled with ones
+
+    Arguments:
+        sequence_length -- matrix size
+
+    Returns:
+        mask -- (size, size) tensor
+    """
+    mask = tf.linalg.band_part(tf.ones((1, sequence_length, sequence_length)), -1, 0)
+    return mask
+
 
 
